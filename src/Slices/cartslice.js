@@ -30,7 +30,8 @@
   
 //   export default cartSlice.reducer
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
+export const modifycarttable = createAsyncThunk('modifycarttable',)
 
 const initialState = {
   itemsincart: [],

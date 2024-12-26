@@ -5,10 +5,9 @@ import Cookies from "js-cookie"
  export default function Head({setSubmittedValue,Seterror1}){
      const navigate =useNavigate();
     function logout(){
-        // Cookies.remove('jwt-token')
+        Cookies.remove('jwt_token')
         // Seterror1('false')
         navigate('/login')
-       
 
     }
     

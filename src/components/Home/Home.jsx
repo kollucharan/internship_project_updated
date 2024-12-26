@@ -18,7 +18,7 @@ const QUERY_TO_GET_PRODUCTS = gql`
 export default function Home() {
   const [submittedValue, setSubmittedValue] = useState(''); // Holds the value after submission
 
-  const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCTS);
+  const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCTS,);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import {addtocart} from '../../Slices/cartslice'
+import { useQuery,useMutation } from "@apollo/client";
 
 export default function Item({product}){
    const dispatch =useDispatch();
     function Add(){
         dispatch(addtocart(product));
+
     }
 
     return (
