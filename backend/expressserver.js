@@ -1,11 +1,10 @@
-// express server for authentication
-//  const jwt =require('jsonwebtoken');
-//   const express =require('express')
+
 import jwt from "jsonwebtoken";
 import cors from "cors";
 const secret = "mySuperSecretKey1234567890abcdefg";
 import express from "express";
 import axios from "axios";
+import Cookies from "js-cookie";
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -29,7 +28,7 @@ app.post("/login", async (req, res) => {
             }
           }
         `,
-        variables: { email }, //email to query
+        variables: { email }, 
       },
       {
         headers: {
@@ -43,7 +42,7 @@ app.post("/login", async (req, res) => {
    
 
     if (!user) {
-      // res.status(400).json({ userinvalid: true });
+      
       res.status(400).send("user");
       return;
     }
@@ -51,30 +50,12 @@ app.post("/login", async (req, res) => {
     const isPasswordValid = password === user.password;
 
     if (!isPasswordValid) {
-      //console.log("inside block");
-      // res.status(401).json({ passworderror: true });
+      
        res.status(401).send("Password");
        return 
     }
-  //   const claims = {
-  //     'https://hasura.io/jwt/claims':{
-  //         "x-hasura-default-role": "customer",
-  //         'x-hasura-allowed-roles': ['customer','admin'],
-  //         'X-Hasura-user-id': user.id,
-  //         'x-hasura-user-name':user.name
-          
-  //     }
-  // }
 
-// const claims = {
-//     'https://hasura.io/jwt/claims':{
-//         "x-hasura-default-role": "customer",
-//         'x-hasura-allowed-roles': ['customer','admin'],
-//         'X-Hasura-user-id': user.id,
-//         'x-hasura-user-name':user.name,
-//         // 'x-hasura-admin-secret':'hasura-secret'
-//     }
-// }  
+ 
 const claims = {
   "https://hasura.io/jwt/claims": {
     "x-hasura-default-role": "customer",
@@ -85,7 +66,6 @@ const claims = {
   }
 };
 
-
     const token = jwt.sign(
       { userId: user.id, 
 
@@ -93,8 +73,8 @@ const claims = {
       },
       secret// Secret key for signing the JWT token,  
     );
-
-    res.status(200).json({ token });
+    console.log(user);
+    res.status(200).json({ token ,user});
   } catch (error) { 
     console.error(error);
 

@@ -12,17 +12,18 @@ import Productdetails from "./components/Productdetails/Productdetails";
 
 function App() {
   // const [count, setCount] = useState(0)
+  const [user,SetUser]=useState('null');
   return (
     <div>
       <Routes>
        
         <Route element={<Protectedroutes />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/" element={<Home user={user} SetUser={SetUser}/>} />
+          <Route path="/cart" element={<Cart user= {user}/>} />
           <Route path="/product/:id" element={<Productdetails />} />
           <Route path="/contactus" element={<Contactus />} />
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login SetUser={SetUser}/>} />
       </Routes>
     </div>
   );

@@ -1,51 +1,61 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-export default function Login() {
+import { useDispatch } from "react-redux";
+import "./login.css";
+
+export default function Login({ SetUser }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [invalid, SetInvalid] = useState("");
   const [email, Setemail] = useState("");
   const [password, Setpassword] = useState("");
 
   useEffect(() => {
-    const token = Cookies.get("jwt_token")
-  
-    if(token){
-      navigate('/')
+    const token = Cookies.get("jwt_token");
+
+    if (token) {
+      navigate("/");
     }
-  },[])
+  }, []);
 
   async function login() {
- 
-    const options ={
-      method:'POST',
-      body:JSON.stringify({email:email,password:password}),
+    const options = {
+      method: "POST",
+      body: JSON.stringify({ email: email, password: password }),
       headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-    }
-      const response = await fetch("http://localhost:3000/login", options);
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    };
+    const response = await fetch("http://localhost:3000/login", options);
     if (response.status === 200) {
-      const data = await response.json()
-      const { token } = data;
-      console.log(token);
+      const data = await response.json();
+      const { token, user } = data;
+      console.log(JSON.stringify(user));
       Cookies.set("jwt_token", token);
+      Cookies.set("user", JSON.stringify(user));
+
+      //  dispatch(userlogin(user));
+
+      SetUser(user);
+
       navigate("/");
       return;
-    } 
-    else if (response.status === 400) {
+    } else if (response.status === 400) {
       SetInvalid("user not found");
     } else {
       SetInvalid("Password Error");
     }
   }
   return (
-    <div>
-      <form>
+    <div className="login-container">
+      <form className="login-form">
         {/* <input type=""/> */}
-        <label htmlFor="email">Email id:</label>
+        <label htmlFor="email" className="label">
+          Email id:
+        </label>
         <input
+          className="input"
           type="email"
           name="email"
           id="email"
@@ -53,21 +63,22 @@ export default function Login() {
           onChange={(e) => Setemail(e.target.value)}
         />
 
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password" className="label">
+          Password:
+        </label>
         <input
-          type="text"
+          className="input"
+          type="password"
           name="password"
           id="password"
           onChange={(e) => Setpassword(e.target.value)}
           required
         />
-
-        <button type="button" onClick={login}>
+        <p className="error">{invalid}</p>
+        <button type="button" onClick={login} className="login-button">
           Submit
         </button>
       </form>
-
-      <div>{invalid}</div>
     </div>
   );
 }

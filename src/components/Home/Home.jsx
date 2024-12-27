@@ -3,6 +3,8 @@ import Head from '../Head/Head';
 import Filter from '../filter/Filter';
 import Item from '../item/item';
 import { useEffect, useState } from 'react';
+import './Home.css'
+import {useselector } from 'react-redux'
 
 const QUERY_TO_GET_PRODUCTS = gql`
   query {
@@ -18,7 +20,9 @@ const QUERY_TO_GET_PRODUCTS = gql`
 export default function Home() {
   const [submittedValue, setSubmittedValue] = useState(''); // Holds the value after submission
 
-  const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCTS,);
+  const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCTS);
+
+  const categories=useselector((state)=>state.categories)
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -40,16 +44,16 @@ export default function Home() {
         <Head setSubmittedValue={setSubmittedValue} />
       </div>
       <div style={{ display: 'flex' }}>
-        <div>
+        <div className='filter-container'>
           <Filter />
         </div>
-        <span>
+        <div className='card-container'>
           {productsToDisplay.length > 0 ? (
-            productsToDisplay.map((item) => <Item key={item.id} product={item} />)
+            productsToDisplay.map((item) => <Item key={item.id} product={item}  />)
           ) : (
             <p>No products found.</p>
           )}
-        </span>
+        </div>
       </div>
     </div>
   );
