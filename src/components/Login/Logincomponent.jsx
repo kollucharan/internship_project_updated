@@ -31,7 +31,7 @@ export default function Login({ SetUser }) {
     if (response.status === 200) {
       const data = await response.json();
       const { token, user } = data;
-      console.log(JSON.stringify(user));
+
       Cookies.set("jwt_token", token);
       Cookies.set("user", JSON.stringify(user));
 

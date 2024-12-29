@@ -73,7 +73,6 @@ const claims = {
       },
       secret// Secret key for signing the JWT token,  
     );
-    console.log(user);
     res.status(200).json({ token ,user});
   } catch (error) { 
     console.error(error);

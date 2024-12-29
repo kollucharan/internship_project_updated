@@ -55,7 +55,7 @@ export default function Item({ product }) {
   // const user= useSelector((state) => state.userdetails.user?.[0]);
   const stringifyUser = Cookies.get("user");
   const user = JSON.parse(stringifyUser);
-  console.log(user);
+
   const handleAddToCart = async () => {
     try {
       // Trigger the lazy query to check if the item exists in the cart

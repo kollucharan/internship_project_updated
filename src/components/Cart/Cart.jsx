@@ -44,8 +44,6 @@ function Cart() {
     fetchPolicy: "network-only",
   });
 
-  console.log(data);
-
   async function remove(producttodelete) {
     try {
       await Deletefromcart({
