@@ -24,6 +24,7 @@ app.post("/login", async (req, res) => {
               id
               email
               password
+              is_admin
              
             }
           }
@@ -48,6 +49,7 @@ app.post("/login", async (req, res) => {
     }
 
     const isPasswordValid = password === user.password;
+    const isadmin=user.is_admin;
 
     if (!isPasswordValid) {
       
@@ -56,16 +58,16 @@ app.post("/login", async (req, res) => {
     }
 
  
-const claims = {
+  const claims = {
   "https://hasura.io/jwt/claims": {
-    "x-hasura-default-role": "customer",
+    "x-hasura-default-role": isadmin ? "admin": "customer" ,
     "x-hasura-allowed-roles": ["customer", "admin"],
     "x-hasura-user-id":  `${user.id}`,
     "x-hasura-user-name": user.name,
      // 'x-hasura-admin-secret':'hasura-secret'
   }
-};
-
+ };
+ 
     const token = jwt.sign(
       { userId: user.id, 
 

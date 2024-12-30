@@ -44,6 +44,10 @@
   
   /* Responsive Design */
   @media (max-width: 768px) {
+    .filterComponent{
+      height: auto;
+  }
+    
     .formclass {
       padding: 10px 15px;
     }

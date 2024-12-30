@@ -1,8 +1,8 @@
 
 import {gql,useQuery} from '@apollo/client'
 import { useParams } from 'react-router-dom';
-import { useSelector,useDispatch } from 'react-redux';
-import { addtocart } from '../../Slices/cartslice';
+// import { useSelector,useDispatch } from 'react-redux';
+// import { addtocart } from '../../Slices/cartslice';
 import './productdetails.css'
 
 const QUERY_TO_GET_PRODUCT = gql`
@@ -17,7 +17,7 @@ query MyQuery ($id:Int!){
 export default  function productdetails(){
     
     const {id} =useParams();
-    const dispatch =useDispatch();
+    // const dispatch =useDispatch();
    // const {data,loading,error} =useQuery(QUERY_TO_GET_PRODUCT);
    const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCT, {
     variables: { id: parseInt(id) }, // Send ID as a variable

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import "./login.css";
 
 export default function Login({ SetUser }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const [invalid, SetInvalid] = useState("");
   const [email, Setemail] = useState("");
@@ -37,7 +37,7 @@ export default function Login({ SetUser }) {
 
       //  dispatch(userlogin(user));
 
-      SetUser(user);
+      // SetUser(user);
 
       navigate("/");
       return;

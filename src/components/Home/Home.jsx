@@ -4,6 +4,7 @@ import Filter from "../filter/Filter";
 import Item from "../item/item";
 import { useEffect, useState } from "react";
 import "./Home.css";
+import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 
 const QUERY_TO_GET_PRODUCTS = gql`
@@ -20,8 +21,14 @@ const QUERY_TO_GET_PRODUCTS = gql`
   }
 `;
 
-export default function Home() {
-  const { data, loading, error } = useQuery(QUERY_TO_GET_PRODUCTS);
+
+
+export default function Home({count}) {
+  
+  // const stringifyUser = Cookies.get("user");
+  //   const user = JSON.parse(stringifyUser);
+  
+  const { data, loading, error ,refetch} = useQuery(QUERY_TO_GET_PRODUCTS);
   const [submittedValue, setSubmittedValue] = useState("");
 
   const categories = useSelector((state) => state.categories?.filters);
@@ -51,7 +58,7 @@ export default function Home() {
     <div>
       <div>
         {/* Pass setSubmittedValue to the Head component */}
-        <Head setSubmittedValue={setSubmittedValue} />
+        <Head setSubmittedValue={setSubmittedValue} count={count} />
       </div>
       <div style={{ display: "flex" }}>
         <div className="filter-container">
@@ -59,7 +66,7 @@ export default function Home() {
         </div>
         <div className="card-container">
           {finalProducts.length > 0 ? (
-            finalProducts.map((item) => <Item key={item.id} product={item} />)
+            finalProducts.map((item) => <Item key={item.id} product={item}  refetchproducts={refetch}/>)
           ) : (
             <p>No products found.</p>
           )}

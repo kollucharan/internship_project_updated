@@ -1,6 +1,9 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import "./cart.css";
+import { addtocount, removefromcount } from "../../Slices/countslice";
+import Head from "../Head/Head";
+import { useDispatch } from "react-redux";
 
 const JOIN_QUERY = gql`
   query GetCartWithProductDetails($user_id: Int!) {
@@ -38,19 +41,31 @@ function Cart() {
   const stringifyUser = Cookies.get("user");
   const user = JSON.parse(stringifyUser);
   const [Deletefromcart] = useMutation(DELETE_MUTATION);
+  const dispatch=useDispatch();
 
-  const { data, loading, error } = useQuery(JOIN_QUERY, {
+  const { data, loading, error, refetch } = useQuery(JOIN_QUERY, {
     variables: { user_id: user?.id },
     fetchPolicy: "network-only",
+    // onCompleted: (data) => {
+    //   const totalCount = data.cart.reduce((sum, item) => sum + item.quantity, 0);
+    //   setCount(totalCount);
+    // },
   });
 
   async function remove(producttodelete) {
+   // console.log(producttodelete);
     try {
       await Deletefromcart({
-        variables: { product_id: producttodelete.id, user_id: user.id },
-        fetchPolicy: "network-only",
+        variables: {
+          product_id: producttodelete?.product_id,
+          user_id: user.id,
+        },
+        // fetchPolicy: "network-only",
       });
-      window.location.reload();
+      // window.location.reload();
+
+      dispatch(removefromcount(producttodelete.quantity));
+      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +95,7 @@ function Cart() {
               <p className="item-quantity">
                 <strong>Quantity:</strong> {item.quantity}
               </p>
-              <button onClick={() => remove(item.product)} className="remove">
+              <button onClick={() => remove(item)} className="remove">
                 Remove From Cart
               </button>
             </div>

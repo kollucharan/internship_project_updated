@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useMutation, gql, useLazyQuery } from "@apollo/client";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import './item.css'
+import { use } from "react";
+import { addtocount,removefromcount } from "../../Slices/countslice";
 const CHECKING_ITEM_INCART = gql`
   query GetCartByProductId($product_id: Int!, $user_id: Int!) {
     cart(
@@ -45,20 +47,45 @@ const UPDATE_CART = gql`
   }
 `;
 
-export default function Item({ product }) {
+ const DELETE_PRODUCT = gql `
+   
+  mutation MyMutation ($id: Int!) {
+  delete_products_by_pk(id: $id){
+    id
+  }
+}
+   `
+
+
+export default function Item({ product ,refetchproducts }) {
+  const dispatch=useDispatch();
   // const user={ user }
+   
   const [fetchCart, { loading: cartLoading, error: cartError }] =
     useLazyQuery(CHECKING_ITEM_INCART);
 
   const [addItemToCart] = useMutation(ADD_ITEM_TOCART);
   const [updateCart] = useMutation(UPDATE_CART);
+  const [removeproduct] =useMutation(DELETE_PRODUCT);
   // const user= useSelector((state) => state.userdetails.user?.[0]);
   const stringifyUser = Cookies.get("user");
   const user = JSON.parse(stringifyUser);
 
+    //   const deleteproduct =async()=>{
+      
+    // await  removeproduct({
+    //   variables :{
+    //     id:  product.id,
+    //   },
+    // })
+
+    // refetchproducts();
+    //  }
+
   const handleAddToCart = async () => {
     try {
       // Trigger the lazy query to check if the item exists in the cart
+
       const { data } = await fetchCart({
         variables: { product_id: product.id, user_id: user.id },
         fetchPolicy: "network-only",
@@ -82,12 +109,17 @@ export default function Item({ product }) {
           },
         });
       }
+
+
+    // dispatch(addtocount());
+
     } catch (error) {
       console.error("Error while adding/updating cart:", error.message);
     }
+      dispatch(addtocount());
   };
 
-  if (cartLoading) return <p>Loading cart...</p>;
+  if (cartLoading) return <p>Loading ...</p>;
   if (cartError) return <p>Error: {cartError.message}</p>;
 
   return (
@@ -105,7 +137,8 @@ export default function Item({ product }) {
       <p className="price">${product.price}</p>
       <p className="name">{product.name}</p>
       <div>
-        <button onClick={handleAddToCart} className="button">Add to Cart</button>
+       <button onClick={handleAddToCart} className="button">Add to Cart</button>  
+          {/* {isadmin && <button onClick={deleteproduct} className="button">Delete Product</button> */} 
       </div>
     </div>
   );
