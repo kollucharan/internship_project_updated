@@ -2,13 +2,14 @@
 .navbar {
   background-color: #333;
   padding: 10px;
+  width: 100%;
 }
 
 .nav-items {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+}  
 
 .nav-item {
   color: white;

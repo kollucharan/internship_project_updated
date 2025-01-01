@@ -7,9 +7,22 @@ import "./Home.css";
 import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 
+// const QUERY_TO_GET_PRODUCTS = gql`
+//   query {
+//     products {
+//       id
+//       name
+//       price
+//       image_url
+//       category {
+//         name
+//       }
+//     }
+//   }
+// `;
 const QUERY_TO_GET_PRODUCTS = gql`
   query {
-    products {
+    products(where: { is_deleted: { _eq: false } }) {
       id
       name
       price
@@ -21,14 +34,15 @@ const QUERY_TO_GET_PRODUCTS = gql`
   }
 `;
 
-
-
 export default function Home({count}) {
   
-  // const stringifyUser = Cookies.get("user");
-  //   const user = JSON.parse(stringifyUser);
-  
-  const { data, loading, error ,refetch} = useQuery(QUERY_TO_GET_PRODUCTS);
+  const { data, loading, error ,refetch} = useQuery(QUERY_TO_GET_PRODUCTS,{
+    context: {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("jwt_token")}`, // Add JWT token here
+      },
+    },
+  });
   const [submittedValue, setSubmittedValue] = useState("");
 
   const categories = useSelector((state) => state.categories?.filters);
@@ -57,7 +71,6 @@ export default function Home({count}) {
   return (
     <div>
       <div>
-        {/* Pass setSubmittedValue to the Head component */}
         <Head setSubmittedValue={setSubmittedValue} count={count} />
       </div>
       <div style={{ display: "flex" }}>

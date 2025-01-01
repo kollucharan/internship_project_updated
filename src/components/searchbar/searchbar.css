@@ -1,5 +1,5 @@
 /* Base Styling for the Search Container */
-.search-container {
+/* .search-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,9 +7,9 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+   */
   /* Input Field Styling */
-  .search-input {
+  /* .search-input {
     flex: 1;
     padding: 10px 15px;
     border: 1px solid #cccccc;
@@ -26,7 +26,7 @@
   }
   
   /* Button Styling */
-  .search-button {
+  /* .search-button {
     padding: 10px 20px;
     background-color: #3498db;
     color: white;
@@ -40,10 +40,10 @@
   
   .search-button:hover {
     background-color: #2980b9;
-  }
-  
+  } 
+   */
   /* Responsive Design */
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .search-container {
       flex-direction: column;
       gap: 15px;
@@ -54,5 +54,73 @@
       width: 100%;
       font-size: 16px;
     }
+  }  */
+
+/* Base Styling for the Search Container */
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Increase gap for better spacing */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px; /* Add some padding for a larger container */
+}
+
+/* Input Field Styling */
+.search-input {
+  flex: 1;
+  padding: 15px 20px; /* Increase padding for larger input */
+  width: 500px; /* Explicitly set a larger width */
+  max-width: 100%; /* Ensure it doesn't exceed the container width */
+  border: 1px solid #cccccc;
+  border-radius: 6px; /* Slightly larger border-radius for smoother edges */
+  font-size: 18px; /* Increase font size */
+  color: #333333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Button Styling */
+.search-button {
+  padding: 15px 25px; /* Increase padding for a larger button */
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px; /* Increase font size */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .search-container {
+      flex-direction: column;
+      gap: 20px; /* Increase gap for better spacing on smaller screens */
+      padding: 20px; /* Add padding for a larger touch target */
   }
+
+  .search-input {
+      width: 100%; /* Make the search bar take full width on smaller screens */
+      font-size: 20px; /* Larger font for mobile */
+  }
+
+  .search-button {
+      width: 100%; /* Make the button take full width on smaller screens */
+      font-size: 20px; /* Larger font for mobile */
+  }
+}
+
+  
   

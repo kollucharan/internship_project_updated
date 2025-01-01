@@ -1,37 +1,96 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import "./cart.css";
-import { addtocount, removefromcount } from "../../Slices/countslice";
-import Head from "../Head/Head";
+import {setCartCount, incrementCartCount, decrementCartCount } from '../../Slices/countslice'
 import { useDispatch } from "react-redux";
+   
+// const JOIN_QUERY = gql`
+//   query GetCartWithProductDetails($user_id: Int!) {
+//     cart(where: { user_id: { _eq: $user_id } }) {
+//       id
+//       product_id
+//       quantity
+//       product {
+//         # This is the related 'product' data
+//         id
+//         name
+//         price
+//         image_url
+//       }
+//     }
+//   } `
 
-const JOIN_QUERY = gql`
+// const JOIN_QUERY = gql`
+
+//   query GetCartWithProductDetails($user_id: Int!) {
+//   cart(where: { user_id: { _eq: $user_id }, product: { is_deleted: { _eq: false } } }) {
+//     id
+//     product_id
+//     quantity
+//     product {
+//       id
+//       name
+//       price
+//       image_url
+//     }
+//   }
+// }
+
+// `;
+
+ const JOIN_QUERY = gql`
+
   query GetCartWithProductDetails($user_id: Int!) {
-    cart(where: { user_id: { _eq: $user_id } }) {
+  cart(
+    where: {
+      user_id: { _eq: $user_id },
+      is_deleted: { _eq: false }, # Check for non-deleted cart items
+      product: { is_deleted: { _eq: false } } # Check for non-deleted products
+    }
+  ) {
+    id
+    product_id
+    quantity
+    product {
       id
-      product_id
-      quantity
-      product {
-        # This is the related 'product' data
-        id
-        name
-        price
-        image_url
-      }
+      name
+      price
+      image_url
     }
   }
+}
+
+
 `;
 
+
+// const DELETE_MUTATION = gql`
+//   mutation DeleteCartItem($product_id: Int!, $user_id: Int!) {
+//     delete_cart(
+//       where: { product_id: { _eq: $product_id }, user_id: { _eq: $user_id } }
+//     ) {
+//       returning {
+//         id
+//         product_id
+//         user_id
+//         quantity
+//       }
+//     }
+//   }
+// `;
+
 const DELETE_MUTATION = gql`
-  mutation DeleteCartItem($product_id: Int!, $user_id: Int!) {
-    delete_cart(
-      where: { product_id: { _eq: $product_id }, user_id: { _eq: $user_id } }
+   mutation DeleteCartItem($product_id: Int!, $user_id: Int!) {
+    update_cart(
+      where: { product_id: { _eq: $product_id }, user_id: { _eq: $user_id } },
+      _set: { is_deleted: true }
     ) {
       returning {
         id
         product_id
         user_id
         quantity
+        is_deleted
       }
     }
   }
@@ -42,29 +101,38 @@ function Cart() {
   const user = JSON.parse(stringifyUser);
   const [Deletefromcart] = useMutation(DELETE_MUTATION);
   const dispatch=useDispatch();
+  const headers = {
+    Authorization: `Bearer ${Cookies.get("jwt_token")}`, // Replace 'authToken' with your token name
+    
+  };
 
   const { data, loading, error, refetch } = useQuery(JOIN_QUERY, {
     variables: { user_id: user?.id },
     fetchPolicy: "network-only",
-    // onCompleted: (data) => {
-    //   const totalCount = data.cart.reduce((sum, item) => sum + item.quantity, 0);
-    //   setCount(totalCount);
-    // },
+    context: {
+      headers,
+    },
+  
   });
 
   async function remove(producttodelete) {
-   // console.log(producttodelete);
+  
     try {
       await Deletefromcart({
         variables: {
           product_id: producttodelete?.product_id,
           user_id: user.id,
         },
+
+        context: {
+          headers,
+        },
         // fetchPolicy: "network-only",
       });
       // window.location.reload();
 
-      dispatch(removefromcount(producttodelete.quantity));
+    //  dispatch(removefromcount(producttodelete.quantity));
+      dispatch(decrementCartCount(producttodelete.quantity));
       refetch();
     } catch (error) {
       console.log(error);

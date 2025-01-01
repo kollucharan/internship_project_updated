@@ -28,6 +28,16 @@
     color: #333;
     margin-bottom: 10px;
   }
+
+  .loading-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+  }
   
   /* Price Styling */
   .pproductdetails:nth-child(2) {
